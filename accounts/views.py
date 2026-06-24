@@ -18,3 +18,19 @@ def register_user(request):
             
         user = Account.objects.create(username=username, password=password)
         return JsonResponse({'message': 'User created successfully'}, status=201)
+
+@csrf_exempt
+def login_user(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        username = data.get('username')
+        password = data.get('password')
+        
+        try:
+            user = Account.objects.get(username=username)
+            if user.password == password:
+                return JsonResponse({'message': 'Login successful!'}, status=200)
+            else:
+                return JsonResponse({'error': 'Invalid password'}, status=400)
+        except Account.DoesNotExist:
+            return JsonResponse({'error': 'User does not exist'}, status=404)
