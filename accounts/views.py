@@ -10,6 +10,9 @@ def register_user(request):
         username = data.get('username')
         password = data.get('password')
         
+        if not password or len(password) > 20:
+            return JsonResponse({'error': 'Password cannot be empty or longer than 20 characters.'}, status=400)
+            
         if MyUser.objects.filter(username=username).exists():
             return JsonResponse({'error': 'Username already exists'}, status=400)
             
