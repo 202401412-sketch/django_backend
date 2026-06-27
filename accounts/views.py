@@ -10,13 +10,31 @@ def register_user(request):
         username = data.get('username')
         password = data.get('password')
         
+        
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        email = data.get('email')
+        phone = data.get('phone')
+        age = data.get('age')
+        address = data.get('address')
+        
         if not password or len(password) > 20:
             return JsonResponse({'error': 'Password cannot be empty or longer than 20 characters.'}, status=400)
             
         if Account.objects.filter(username=username).exists():
             return JsonResponse({'error': 'Username already exists'}, status=400)
             
-        user = Account.objects.create(username=username, password=password)
+        
+        user = Account.objects.create(
+            username=username, 
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            phone=phone,
+            age=age,
+            address=address
+        )
         return JsonResponse({'message': 'User created successfully'}, status=201)
 
 @csrf_exempt
